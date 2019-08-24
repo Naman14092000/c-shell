@@ -114,6 +114,7 @@ void LS(char *str)
     }
     printf("\n");
   }
+  exit(0);
 }
 void LS1(char *dir)
 {
@@ -145,6 +146,7 @@ void LS1(char *dir)
       printf("Allocate memory failed!");
     }
   }
+  exit(0);
 }
 void LS2(char *dir)
 {
@@ -182,6 +184,7 @@ void LS2(char *dir)
       printf("Allocate memory failed!");
     }
   }
+  exit(0);
 }
 void LS3(char *dir)
 {
@@ -201,6 +204,7 @@ void LS3(char *dir)
     printf("%s\t", dirname->d_name);
   }
   printf("\n");
+  exit(0);
 }
 void dostat(char *absoluteFileName, char *filename)
 {

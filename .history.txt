@@ -1,0 +1,21 @@
+6
+ls
+vi
+emacs
+vi
+emacs
+sudo apt install
+cd ..
+pinfo
+nightswatch
+nightswatch -n 1 interrupt
+nightswatch -n 1 dirty
+echo naman\
+pwd
+nightswatch -n 1 interrupts
+cd ..
+cd ..
+cd ..
+cd
+cd /
+cd ~/

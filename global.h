@@ -18,10 +18,18 @@ char *homedir;
 int homedirlenght;
 int commandindex;
 char commands[20][100];
+struct bg_process
+{
+  int pid;
+  char proc_name[128];
+  struct bg_process *next;
+};
+struct bg_process *root;
+
 void CD(char *str);
 void DIRTY(int n);
 void ECHOAYA(char *str);
-void HISTORY(char commands[][100], int index, char *command);
+void HISTORY(char *command);
 void changemode(int dir);
 int kbhit (void);
 void INTERRUPT(int n);
@@ -37,3 +45,8 @@ void show_file_info(char *filename, struct stat *info_p);
 void PINFO(char *str);
 void curworkdir(char buf[]);
 void trim(char *str);
+void addhistory(char *commmand);
+void delete_bg(struct bg_process *node);
+int background(char *str);
+void writehist(char *sentence);
+char **get_input(char *input);

@@ -2,56 +2,65 @@
 void ECHOAYA(char *str)
 {
   trim(str);
-  char sentence[100];
-  char sentence1[100];
-  for (i = 5; i < strlen(str); i++)
+  char *token1=strtok(str," ");
+  if(token1!=NULL)
   {
-    sentence[i - 5] = str[i];
+    token1=strtok(NULL," ");
   }
-  trim(sentence);
-  for (j = i; j > 0; j--)
+  if(token1!=NULL)
   {
-    if (sentence[j] != ' ')
-    {
-      break;
-    }
+    printf("%s\n",token1);
   }
-  sentence[j + 1] = '\0';
-  j = 0;
-  int cnt = 0;
-  char g = 'A';
-  for (i = 0; i < strlen(sentence); i++)
-  {
-    if ((int)sentence[i] == 92)
-    {
-      sentence1[j++] = sentence[++i];
-    }
-    else if (g == 'A' && (int)sentence[i] == 34)
-    {
-      g = (char)34;
-      cnt = 1;
-    }
-    else if (g == 'A' && (int)sentence[i] == 39)
-    {
-      g = (char)39;
-      cnt = 1;
-    }
-    else if (g != 'A' && sentence[i] == g)
-    {
-      cnt++;
-    }
-    else
-    {
-      sentence1[j++] = sentence[i];
-    }
-  }
-  sentence1[j] = '\0';
-  if (cnt % 2 == 0)
-  {
-    printf("%s\n", sentence1);
-  }
-  else
-  {
-    printf("Please Enter a valid input\n");
-  }
+  // char sentence[100];
+  // char sentence1[100];
+  // for (i = 5; i < strlen(str); i++)
+  // {
+  //   sentence[i - 5] = str[i];
+  // }
+  // trim(sentence);
+  // for (j = i; j > 0; j--)
+  // {
+  //   if (sentence[j] != ' ')
+  //   {
+  //     break;
+  //   }
+  // }
+  // sentence[j + 1] = '\0';
+  // j = 0;
+  // int cnt = 0;
+  // char g = 'A';
+  // for (i = 0; i < strlen(sentence); i++)
+  // {
+  //   if ((int)sentence[i] == 92)
+  //   {
+  //     sentence1[j++] = sentence[++i];
+  //   }
+  //   else if (g == 'A' && (int)sentence[i] == 34)
+  //   {
+  //     g = (char)34;
+  //     cnt = 1;
+  //   }
+  //   else if (g == 'A' && (int)sentence[i] == 39)
+  //   {
+  //     g = (char)39;
+  //     cnt = 1;
+  //   }
+  //   else if (g != 'A' && sentence[i] == g)
+  //   {
+  //     cnt++;
+  //   }
+  //   else
+  //   {
+  //     sentence1[j++] = sentence[i];
+  //   }
+  // }
+  // sentence1[j] = '\0';
+  // if (cnt % 2 == 0)
+  // {
+  //   printf("%s\n", sentence1);
+  // }
+  // else
+  // {
+  //   printf("Please Enter a valid input\n");
+  // }
 }
