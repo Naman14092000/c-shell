@@ -57,7 +57,7 @@ void pipe_handle(char str[][100], int pipe_count)
   int fd[2];
   int in_fd = dup(0);
   int out_fd = dup(1);
-  for (int curr_cmd = i; curr_cmd <= pipe_count; curr_cmd++)
+  for (int curr_cmd = 1; curr_cmd <= pipe_count; curr_cmd++)
   {
     if (curr_cmd == 1)
     {
