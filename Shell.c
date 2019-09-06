@@ -51,23 +51,40 @@ int pipe_check(char *str)
   return pip_cnt;
 }
 
-void pipe_handle(char str[][100], int pipe_count, int curr_cmd)
+void pipe_handle(char str[][100], int pipe_count)
 {
   int status;
-  if (curr_cmd != pipe_count)
+  int fd[2];
+  int in_fd = dup(0);
+  int out_fd = dup(1);
+  for (int curr_cmd = i; curr_cmd <= pipe_count; curr_cmd++)
   {
-    int fd[2];
-    if (pipe(fd) < 0)
+    if (curr_cmd == 1)
     {
-      perror("pipe failed");
+      pipe(fd);
+      out_fd = dup(1);
+      dup2(fd[1], 1);
+    }
+    if (curr_cmd == pipe_count)
+    {
+      close(fd[1]);
+      in_fd = dup(0);
+      dup2(fd[0], 0);
+      close(fd[0]);
+    }
+    else if(curr_cmd!=1 && curr_cmd!=pipe_count)
+    {
+      pipe(fd);
+      out_fd = dup(1);
+      dup2(fd[1], 1);
+      close(fd[1]);
+      in_fd = dup(0);
+      dup2(fd[0], 0);
+      close(fd[0]);
     }
     pid_t pid = forking();
-    if (pid > 0)
+    if (pid == 0)
     {
-      dup2(fd[1], 1);
-      close(fd[0]);
-      trim(str[curr_cmd - 1]);
-      char **dod = get_input(str[curr_cmd - 1]);
       int red_cnt = redirection_check(str[curr_cmd - 1]);
       if (red_cnt)
       {
@@ -75,39 +92,16 @@ void pipe_handle(char str[][100], int pipe_count, int curr_cmd)
       }
       else
       {
-        execvp(dod[0], dod);
-      }
-      // wait(NULL);
-      waitpid(-1, &status, 0);
-    }
-    else
-    {
-      if (curr_cmd != pipe_count)
-      {
-        dup2(fd[0], 0);
-      }
-      close(fd[1]);
-      pipe_handle(str, pipe_count, curr_cmd + 1);
-    }
-  }
-  else
-  {
-    trim(str[curr_cmd - 1]);
-    char **dod = get_input(str[curr_cmd - 1]);
-    int red_cnt = redirection_check(str[curr_cmd - 1]);
-    if (red_cnt)
-    {
-      REDIRECT(str[curr_cmd - 1], red_cnt);
-    }
-    else
-    {
-      // interpreter(str[curr_cmd-1]);
-      pid_t pid = forking();
-      if (pid == 0)
-      {
+        char **dod = get_input(str[curr_cmd - 1]);
         execvp(dod[0], dod);
       }
       exit(0);
+    }
+    else
+    {
+      waitpid(pid, &status, WUNTRACED);
+      dup2(in_fd, 0);
+      dup2(out_fd, 1);
     }
   }
 }
@@ -208,7 +202,7 @@ int main()
           // printf("%s",token1);
           token1 = strtok(NULL, "|");
         }
-        pipe_handle(pip_commands, pipe_cnt + 1, 1);
+        pipe_handle(pip_commands, pipe_cnt + 1);
       }
     }
     termination_check();

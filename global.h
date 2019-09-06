@@ -55,6 +55,6 @@ void insert(pid_t pid, char *str);
 int redirection_check(char *str);
 void REDIRECT(char *str, int red_cnt);
 void interpreter(char *str);
-void pipe_handle(char str[][100], int pipe_count, int curr_cmd);
+void pipe_handle(char str[][100], int pipe_count);
 int pipe_check(char *str);
 pid_t forking();

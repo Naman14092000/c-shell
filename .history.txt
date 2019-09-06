@@ -1,21 +1,21 @@
-9
+13
+cat pwd.c | wc -l > new.c
+cat new.c
+exit
 cat pwd.c | wc -l
-#include "global.h"
-void curworkdir(char buf[]) { getcwd(buf, 100)
- }
-cat pwd.c | wc -l
+cat echo.c | wc -l > new.c 
+cat new.c
+cat pwd.c | wc -l >> new,c
+cat new.c
+cat < pwd.c | wc -l
+cat < pwd.c | wc -l >> new.c
+cat new.c
+rm new,c
 ls
-cd
-cd ..
-cd 
+cat pwd.c | wc -l > new.txt
 cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
+wc -l pwd.c
+wc -l < pwd.c
 cat pwd.c | wc -l
 cat pwd.c | wc -l
 cat pwd.c | wc -l
