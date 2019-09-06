@@ -38,6 +38,79 @@ char **get_input(char *input)
   return command;
 }
 
+int pipe_check(char *str)
+{
+  int pip_cnt = 0;
+  for (int i = 0; i < strlen(str); i++)
+  {
+    if (str[i] == '|')
+    {
+      pip_cnt++;
+    }
+  }
+  return pip_cnt;
+}
+
+void pipe_handle(char str[][100], int pipe_count, int curr_cmd)
+{
+  int status;
+  if (curr_cmd != pipe_count)
+  {
+    int fd[2];
+    if (pipe(fd) < 0)
+    {
+      perror("pipe failed");
+    }
+    pid_t pid = forking();
+    if (pid > 0)
+    {
+      dup2(fd[1], 1);
+      close(fd[0]);
+      trim(str[curr_cmd - 1]);
+      char **dod = get_input(str[curr_cmd - 1]);
+      int red_cnt = redirection_check(str[curr_cmd - 1]);
+      if (red_cnt)
+      {
+        REDIRECT(str[curr_cmd - 1], red_cnt);
+      }
+      else
+      {
+        execvp(dod[0], dod);
+      }
+      // wait(NULL);
+      waitpid(-1, &status, 0);
+    }
+    else
+    {
+      if (curr_cmd != pipe_count)
+      {
+        dup2(fd[0], 0);
+      }
+      close(fd[1]);
+      pipe_handle(str, pipe_count, curr_cmd + 1);
+    }
+  }
+  else
+  {
+    trim(str[curr_cmd - 1]);
+    char **dod = get_input(str[curr_cmd - 1]);
+    int red_cnt = redirection_check(str[curr_cmd - 1]);
+    if (red_cnt)
+    {
+      REDIRECT(str[curr_cmd - 1], red_cnt);
+    }
+    else
+    {
+      // interpreter(str[curr_cmd-1]);
+      pid_t pid = forking();
+      if (pid == 0)
+      {
+        execvp(dod[0], dod);
+      }
+      exit(0);
+    }
+  }
+}
 void getuserdetails(char username[], char pc_name[], char cwd[])
 {
   struct passwd *details;
@@ -64,6 +137,7 @@ void getuserdetails(char username[], char pc_name[], char cwd[])
     strcpy(CurrDir, cwd);
   }
   printf("%s@%s:%s$ ", username, pc_name, CurrDir);
+  fflush(stdout);
 }
 int main()
 {
@@ -106,211 +180,37 @@ int main()
     char **dod;
     char token[100];
     int idx = 0;
-    char *token1 = strtok(input, ";");
+    char *token2 = strtok(input, ";");
     int currindex = 0;
-    while (token1 != NULL)
+    char commands[10][100];
+    char pip_commands[20][100];
+    int commandindex = 0, pip_commandindex = 0;
+    while (token2 != NULL)
     {
-      pid_t pid = forking();
-      if (strstr(token1, "&"))
-      {
-        if (pid == -1)
-        {
-          perror("Error forking");
-        }
-        else if (pid == 0)
-        {
-          int p = background(token1);
-        }
-        else
-        {
-          dod = get_input(token1);
-          struct bg_process *temp = root;
-          if (root == NULL)
-          {
-            root = (struct bg_process *)malloc(sizeof(struct bg_process));
-            root->next = (struct bg_process *)malloc(sizeof(struct bg_process));
-            root->pid = pid;
-            strcpy(root->proc_name, dod[0]);
-            root->next->next = NULL;
-            root->next->pid = 0;
-            root->next->proc_name[0] = 0;
-          }
-          else
-          {
-
-            while (temp->next != NULL)
-              temp = temp->next;
-
-            strcpy(temp->proc_name, dod[0]);
-            temp->next = (struct bg_process *)malloc(sizeof(struct bg_process));
-            temp->pid = pid;
-            temp->next->pid = 0;
-            temp->next->proc_name[0] = '\0';
-            temp->next->next = NULL;
-          }
-        }
-      }
-      else if (strstr(token1, "history"))
-      {
-        if (pid == 0)
-        {
-          HISTORY(token1);
-          exit(0);
-        }
-        else
-        {
-          waitpid(pid, &status, 0);
-        }
-      }
-      else if (token1[0] == 'c' && token1[1] == 'd')
-      {
-        if (pid == 0)
-        {
-          CD(token1);
-        }
-        else
-        {
-          waitpid(pid, &status, 0);
-          exit(0);
-        }
-      }
-      else if (token1[0] == 'l' && token1[1] == 's')
-      {
-        if (pid == 0)
-        {
-          LS(token1);
-          exit(0);
-        }
-        else
-        {
-          waitpid(pid, &status, 0);
-        }
-      }
-      else if (token1[0] == 'v' && token1[1] == 'i')
-      {
-        if (pid == 0)
-        {
-          dod = get_input(token1);
-          execvp(dod[0], dod);
-          exit(0);
-        }
-        else
-        {
-          waitpid(pid, &status, 0);
-        }
-      }
-      else if (token1[0] == 'p' && token1[1] == 'w' && token1[2] == 'd')
-      {
-        if (pid == 0)
-        {
-          curworkdir(cwd);
-          printf("%s\n", cwd);
-          exit(0);
-        }
-        else
-        {
-          waitpid(pid, &status, 0);
-          // wait(NULL);
-        }
-      }
-      else if (token1[0] == 'e' && token1[1] == 'm' && token1[2] == 'a' && token1[3] == 'c' && token1[4] == 's')
-      {
-        if (pid == 0)
-        {
-          dod = get_input(token1);
-          execvp(dod[0], dod);
-          exit(0);
-        }
-        else
-        {
-          waitpid(pid, &status, 0);
-        }
-      }
-      else if (token1[0] == 'e' && token1[1] == 'c' && token1[2] == 'h' && token1[3] == 'o')
-      {
-        if (pid == 0)
-        {
-          ECHOAYA(token1);
-          exit(0);
-        }
-        else
-        {
-          waitpid(pid, &status, 0);
-        }
-      }
-      else if (token1[0] == 'p' && token1[1] == 'i' && token1[2] == 'n' && token1[3] == 'f' && token1[4] == 'o')
-      {
-        if (pid == 0)
-        {
-          PINFO(token1);
-          exit(0);
-        }
-        else
-        {
-          waitpid(pid, &status, 0);
-        }
-      }
-      else if (token1[0] == 'e' && token1[1] == 'x' && token1[2] == 'i' && token1[3] == 't')
-      {
-        exit(0);
-      }
-
-      else
-      {
-        if (pid == 0)
-        {
-          dod = get_input(token1);
-          if (!strcmp("nightswatch", dod[0]))
-          {
-            if (!strcmp("interrupt", dod[3]))
-            {
-              INTERRUPT(atoi(dod[2]));
-              changemode(0);
-              exit(0);
-            }
-            else if (!strcmp("dirty", dod[3]))
-            {
-              DIRTY(atoi(dod[2]));
-              changemode(0);
-              exit(0);
-            }
-          }
-
-          else
-          {
-            execvp(dod[0], dod);
-            exit(0);
-          }
-        }
-        else
-        {
-          waitpid(pid, &status, 0);
-        }
-      }
-      writehist(token1);
-      token1 = strtok(NULL, ";");
+      strcpy(commands[commandindex++], token2);
+      token2 = strtok(NULL, ";");
     }
-    struct bg_process *temp = root;
-    while (temp != NULL && temp->next != NULL)
+    for (int q = 0; q < commandindex; q++)
     {
-      int ret = waitpid(temp->pid, &status, WNOHANG);
-
-      if (ret == -1)
+      int pipe_cnt = pipe_check(commands[q]);
+      writehist(commands[q]);
+      // pid_t pid = forking();
+      if (!pipe_cnt)
       {
-        printf("Process %s with id %d", temp->proc_name, temp->pid);
-        fflush(stdout);
-        psignal(WTERMSIG(status), "exited by ");
-        delete_bg(temp);
+        interpreter(commands[q]);
       }
-      else if (ret > 0)
+      else if (pipe_cnt > 0)
       {
-        printf("Process %s with pid  %d exited normally\n", temp->proc_name, temp->pid);
-        delete_bg(temp);
+        char *token1 = strtok(commands[q], "|");
+        while (token1 != NULL)
+        {
+          strcpy(pip_commands[pip_commandindex++], token1);
+          // printf("%s",token1);
+          token1 = strtok(NULL, "|");
+        }
+        pipe_handle(pip_commands, pipe_cnt + 1, 1);
       }
-      if (temp->next != NULL)
-        temp = temp->next;
-      else
-        break;
     }
+    termination_check();
   }
 }

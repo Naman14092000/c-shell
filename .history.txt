@@ -1,21 +1,21 @@
-6
+9
+cat pwd.c | wc -l
+#include "global.h"
+void curworkdir(char buf[]) { getcwd(buf, 100)
+ }
+cat pwd.c | wc -l
 ls
-vi
-emacs
-vi
-emacs
-sudo apt install
-cd ..
-pinfo
-nightswatch
-nightswatch -n 1 interrupt
-nightswatch -n 1 dirty
-echo naman\
-pwd
-nightswatch -n 1 interrupts
-cd ..
-cd ..
-cd ..
 cd
-cd /
-cd ~/
+cd ..
+cd 
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
