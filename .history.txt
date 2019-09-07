@@ -1,21 +1,21 @@
-4
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
+8
+setenv naman [dfkndmlf]
+getenv(naman)
+setenv naman [gkjfhj]
 exit
-cat echo.c | wc -l > new.c 
-cat new.c
-cat pwd.c | wc -l >> new,c
-cat new.c
-cat < pwd.c | wc -l
-cat < pwd.c | wc -l >> new.c
-cat new.c
-rm new,c
-ls
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-q
+setenv naman [gfjglkfg]
 exit
+quit
+unsetenv naman
+cat < out.txt
+ls | grep *.txt > out.txt
+cat out.txt
+exit
+cat out.txt
+ls | grep *.txt
+cat cd.c | grep "global.h"
+more ../kbh1.c | wc -l
+cat < pwd.c
+cat < pwd.c < cd.c
+cat < pwd.c < cd.c
+cat < pwd.c < cd.c

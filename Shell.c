@@ -11,7 +11,23 @@ pid_t forking()
   pid = fork();
   return pid;
 }
-
+void SETENV(char *name,char *value)
+{
+  char *old_name=getenv(name);
+  if(!old_name)
+  {
+    putenv(name);
+    setenv(name,value,1);
+  }
+  else
+  {
+   setenv(name,value,1); 
+  }
+}
+void UNSETENV(char *name)
+{
+  unsetenv(name);
+}
 char **get_input(char *input)
 {
   char **command = malloc(100 * sizeof(char *));
@@ -37,73 +53,64 @@ char **get_input(char *input)
   }
   return command;
 }
-
-int pipe_check(char *str)
+void redirect(char *str)
 {
-  int pip_cnt = 0;
-  for (int i = 0; i < strlen(str); i++)
+  char redir_commands[30][100];
+  char *token1 = strtok(str, " ");
+  int commandidx = 0;
+  while (token1 != NULL)
   {
-    if (str[i] == '|')
-    {
-      pip_cnt++;
-    }
+    strcpy(redir_commands[commandidx++], token1);
+    printf("%s\n",token1);
+    token1 = strtok(NULL, " ");
   }
-  return pip_cnt;
-}
-
-void pipe_handle(char str[][100], int pipe_count)
-{
-  int status;
-  int fd[2];
-  int in_fd = dup(0);
-  int out_fd = dup(1);
-  for (int curr_cmd = 1; curr_cmd <= pipe_count; curr_cmd++)
+  int flag = 0;
+  char command[100];
+  command[0] = '\0';
+  for (int i = 0; i < commandidx; i++)
   {
-    if (curr_cmd == 1)
+    if (!strcmp(redir_commands[i], "<"))
     {
-      pipe(fd);
-      out_fd = dup(1);
-      dup2(fd[1], 1);
-    }
-    if (curr_cmd == pipe_count)
-    {
-      close(fd[1]);
-      in_fd = dup(0);
-      dup2(fd[0], 0);
-      close(fd[0]);
-    }
-    else if(curr_cmd!=1 && curr_cmd!=pipe_count)
-    {
-      pipe(fd);
-      out_fd = dup(1);
-      dup2(fd[1], 1);
-      close(fd[1]);
-      in_fd = dup(0);
-      dup2(fd[0], 0);
-      close(fd[0]);
-    }
-    pid_t pid = forking();
-    if (pid == 0)
-    {
-      int red_cnt = redirection_check(str[curr_cmd - 1]);
-      if (red_cnt)
+      int fd = open(redir_commands[i + 1], O_RDONLY);
+      if (fd < 0)
       {
-        REDIRECT(str[curr_cmd - 1], red_cnt);
+        perror("Error opening file");
+      }
+      dup2(fd, 0);
+      close(fd);
+      flag = 1;
+      i++;
+    }
+    if (!strcmp(redir_commands[i], ">"))
+    {
+      int fd1 = open(redir_commands[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+      dup2(fd1, 1);
+      close(fd1);
+      flag = 1;
+      i++;
+    }
+    if (!strcmp(redir_commands[i], ">>"))
+    {
+      int fd2 = open(redir_commands[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+      dup2(fd2, 0);
+      close(fd2);
+      flag = 1;
+      i++;
+    }
+    if (!flag)
+    {
+      if (!strlen(command))
+      {
+        strcpy(command, redir_commands[i]);
       }
       else
       {
-        char **dod = get_input(str[curr_cmd - 1]);
-        execvp(dod[0], dod);
+        strcat(command, redir_commands[i]);
       }
-      exit(0);
-    }
-    else
-    {
-      waitpid(pid, &status, WUNTRACED);
-      dup2(in_fd, 0);
-      dup2(out_fd, 1);
     }
   }
+  char **dod = get_input(command);
+  execvp(dod[0], dod);
 }
 void getuserdetails(char username[], char pc_name[], char cwd[])
 {
@@ -188,7 +195,6 @@ int main()
     {
       int pipe_cnt = pipe_check(commands[q]);
       writehist(commands[q]);
-      // pid_t pid = forking();
       if (!pipe_cnt)
       {
         interpreter(commands[q]);
@@ -199,7 +205,6 @@ int main()
         while (token1 != NULL)
         {
           strcpy(pip_commands[pip_commandindex++], token1);
-          // printf("%s",token1);
           token1 = strtok(NULL, "|");
         }
         pipe_handle(pip_commands, pipe_cnt + 1);

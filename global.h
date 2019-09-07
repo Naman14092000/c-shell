@@ -58,3 +58,6 @@ void interpreter(char *str);
 void pipe_handle(char str[][100], int pipe_count);
 int pipe_check(char *str);
 pid_t forking();
+void redirect(char *str);
+void SETENV(char *name,char *value);
+void UNSETENV(char *name);

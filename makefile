@@ -1,2 +1,2 @@
-Shell: Shell.c cd.c echo.c pwd.c ls.c background.c interrupt.c dirty.c pinfo.c trim.c history.c interpreter.c redirect_handle.c
-	gcc  -ggdb -o Shell Shell.c cd.c echo.c pwd.c  ls.c background.c interrupt.c dirty.c pinfo.c trim.c history.c interpreter.c redirect_handle.c -I.
+Shell: Shell.c cd.c echo.c pwd.c ls.c background.c interrupt.c dirty.c pinfo.c trim.c history.c interpreter.c redirect_handle.c pipe_handler.c
+	gcc  -ggdb -o Shell Shell.c cd.c echo.c pwd.c  ls.c background.c interrupt.c dirty.c pinfo.c trim.c history.c interpreter.c redirect_handle.c pipe_handler.c -I.

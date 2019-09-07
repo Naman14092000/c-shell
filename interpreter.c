@@ -3,7 +3,7 @@ void interpreter(char *str)
 {
   char strin[100];
   int status;
-  pid_t pid=forking();
+  pid_t pid = forking();
   strcpy(strin, str);
   char **dod = get_input(str);
   int red_cnt = redirection_check(strin);
@@ -11,7 +11,8 @@ void interpreter(char *str)
   {
     if (pid == 0)
     {
-      REDIRECT(strin, red_cnt);
+      redirect(strin);
+      // REDIRECT(strin, red_cnt);
       exit(0);
     }
     else
@@ -52,6 +53,44 @@ void interpreter(char *str)
     if (pid == 0)
     {
       LS(strin);
+      exit(0);
+    }
+    else
+    {
+      waitpid(pid, &status, 0);
+    }
+  }
+  else if (!strcmp(dod[0], "setenv"))
+  {
+    if (pid == 0)
+    {
+      char *token4 = strtok(strin, " ");
+      token4 = strtok(NULL, " ");
+      char name[100], value[100];
+      strcpy(name, token4);
+      token4 = strtok(NULL, " ");
+      for (int b = 1; b < strlen(token4) - 1; b++)
+      {
+        value[b - 1] = token4[b];
+      }
+      value[strlen(token4) - 2] = '\0';
+      SETENV(name, value);
+      printf("%s %s\n", name, value);
+      exit(0);
+    }
+    else
+    {
+      waitpid(pid, &status, 0);
+    }
+  }
+  else if (!strcmp(dod[0], "unsetenv"))
+  {
+    if (pid == 0)
+    {
+      char *token4 = strtok(strin, " ");
+      token4 = strtok(NULL, " ");
+      UNSETENV(token4);
+      printf("%s\n",token4);
       exit(0);
     }
     else
@@ -130,7 +169,7 @@ void interpreter(char *str)
       waitpid(pid, &status, 0);
     }
   }
-  else if (!strcmp(dod[0], "exit"))
+  else if (!strcmp(dod[0], "quit"))
   {
     exit(0);
   }
