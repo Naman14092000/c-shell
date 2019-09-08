@@ -1,21 +1,21 @@
-8
-setenv naman [dfkndmlf]
-getenv(naman)
-setenv naman [gkjfhj]
-exit
-setenv naman [gfjglkfg]
-exit
-quit
-unsetenv naman
-cat < out.txt
-ls | grep *.txt > out.txt
-cat out.txt
-exit
-cat out.txt
-ls | grep *.txt
-cat cd.c | grep "global.h"
-more ../kbh1.c | wc -l
-cat < pwd.c
-cat < pwd.c < cd.c
-cat < pwd.c < cd.c
-cat < pwd.c < cd.c
+16
+fg 1
+firefox &
+ls
+jobs
+fg 1
+firefox &
+jobs
+firefox &
+jobs
+kjob 1 2
+jobs
+jobs
+firefox &
+emacs &
+jobs
+fg 1
+fg 1
+bg 1
+ls
+firefox &

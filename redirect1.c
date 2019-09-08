@@ -57,3 +57,36 @@ void redirect(char *str)
     char **dod=get_input(command);
     execvp(dod[0],dod);
 }
+// void JOBS()
+// {
+//   struct bg_process *temp=root;
+//   int pro_cnt=0;
+//   while(!temp)
+//   {
+//     int pid=temp->pid;
+//     char path[50];
+//     sprintf(path,"/proc/%d/status",pid);
+//     int fd=open(path,O_RDONLY);
+//     char buff[1000];
+//     read(fd,buff,500);
+//     char *token=strtok(buff,"\n");
+//     printf("%s\n",token);
+//     token=strtok(NULL,"\n");
+//     printf("%s\n",token);
+//     token=strtok(NULL,"\n");
+//     printf("%s\n",token);
+//     char *token1=strtok(token," ");
+//     printf("%s\n",token1);
+//     token1=strtok(NULL," ");
+//     printf("%s\n",token1);
+//     if(!strcmp("S",token1))
+//     {
+//       printf("[%d] Stopped %s [%d]\n",++pro_cnt,temp->proc_name,temp->pid);
+//     }
+//     else if(!strcmp("R",token1))
+//     {
+//       printf("[%d] Running %s [%d]\n",++pro_cnt,temp->proc_name,temp->pid);
+//     }
+//     temp=temp->next;
+//   }
+// }

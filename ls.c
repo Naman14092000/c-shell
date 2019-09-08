@@ -57,7 +57,6 @@ void LS(char *str)
   }
   dir[i + 1] = '\0';
   flags[z] = '\0';
-  //printf("%s\t%s\t%s\n", dir, flags, str);
   trim(dir);
   int h = strlen(str) - strlen(flags) - 3 - (2 * cnt);
   if (var == 1)
@@ -69,7 +68,6 @@ void LS(char *str)
     h = 0;
   }
   dir[h] = '\0';
-  //printf("%s\t%s\n", homedir, dir);
   DIR *p;
   if (strlen(flags))
   {

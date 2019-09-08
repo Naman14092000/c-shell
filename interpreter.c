@@ -29,7 +29,7 @@ void interpreter(char *str)
     }
     else if (pid == 0)
     {
-      int p = background(strin, status);
+      int p = background(strin);
     }
     else
     {
@@ -46,6 +46,42 @@ void interpreter(char *str)
     {
       waitpid(pid, &status, 0);
       exit(0);
+    }
+  }
+  else if (!strcmp(dod[0], "jobs"))
+  {
+    if (pid == 0)
+    {
+      JOBS();
+      exit(0);
+    }
+    else
+    {
+      waitpid(pid, &status, 0);
+    }
+  }
+  else if(!strcmp(dod[0],"kjob"))
+  {
+    if(pid==0)
+    {
+      K_JOB(strin);
+      exit(0);
+    }
+    else
+    {
+      waitpid(pid,&status,0);
+    }
+  }
+  else if(!strcmp(dod[0],"overkill"))
+  {
+    if(pid==0)
+    {
+      OVERKILL();
+      exit(0);
+    }
+    else
+    {
+      waitpid(pid,&status,0);
     }
   }
   else if (!strcmp(dod[0], "ls"))
@@ -90,13 +126,39 @@ void interpreter(char *str)
       char *token4 = strtok(strin, " ");
       token4 = strtok(NULL, " ");
       UNSETENV(token4);
-      printf("%s\n",token4);
+      printf("%s\n", token4);
       exit(0);
     }
     else
     {
       waitpid(pid, &status, 0);
     }
+  }
+  else if(!strcmp(dod[0],"bg"))
+  {
+    if(pid==0)
+    {
+      bg(atoi(dod[1]));
+      exit(0);
+    }
+    else
+    {
+      waitpid(pid,&status,0);
+    }
+    
+  }
+  else if(!strcmp(dod[0],"fg"))
+  {
+    if(pid==0)
+    {
+      fg(atoi(dod[1]));
+      exit(0);
+    }
+    else
+    {
+      waitpid(pid,&status,0);
+    }
+    
   }
   else if (!strcmp(dod[0], "echo"))
   {

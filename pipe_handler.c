@@ -36,26 +36,60 @@ void pipe_handle(char str[][100], int pipe_count)
             int red_cnt = redirection_check(str[curr_cmd - 1]);
             if (red_cnt)
             {
-                REDIRECT(str[curr_cmd - 1], red_cnt);
+                redirect(str[curr_cmd - 1]);
             }
             else
             {
-                char **dod = get_input(str[curr_cmd - 1]);
                 interpreter(str[curr_cmd - 1]);
-                // execvp(dod[0],dod);
             }
 
             exit(0);
         }
         else
         {
-            waitpid(pid, &status, WUNTRACED);
+            waitpid(pid, &status, 0);
             dup2(in_fd, 0);
             dup2(out_fd, 1);
         }
     }
 }
-
+// void pipe_handler(char str[][100], int pipe_count)
+// {
+//     int fd[pipe_count * 2];
+//     pid_t pid;
+//     int status;
+//     for (int curr_cmd = 0; curr_cmd < pipe_count; curr_cmd++)
+//     {
+//         if (pid = forking() == 0)
+//         {
+//             pipe(fd + (2 * curr_cmd));
+//             // close(1);
+//             // dup(fd[curr_cmd]);
+//             dup2(fd[curr_cmd], 1);
+//             if (i > 0)
+//             {
+//                 // close(0);
+//                 // dup(fd[curr_cmd - 1]);
+//                 dup2(fd[curr_cmd - 1], 0);
+//             }
+//             int red_cnt = redirection_check(str[curr_cmd - 1]);
+//             if (red_cnt)
+//             {
+//                 redirect(str[curr_cmd]);
+//             }
+//             else
+//             {
+//                 interpreter(str[curr_cmd]);
+//             }
+//             close(fd[curr_cmd]);
+//             exit(0);
+//         }
+//         // else
+//         // {
+//         // waitpid(pid, &status, WUNTRACED);
+//         // }
+//     }
+// }
 int pipe_check(char *str)
 {
     int pip_cnt = 0;

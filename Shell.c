@@ -11,23 +11,9 @@ pid_t forking()
   pid = fork();
   return pid;
 }
-void SETENV(char *name,char *value)
-{
-  char *old_name=getenv(name);
-  if(!old_name)
-  {
-    putenv(name);
-    setenv(name,value,1);
-  }
-  else
-  {
-   setenv(name,value,1); 
-  }
-}
-void UNSETENV(char *name)
-{
-  unsetenv(name);
-}
+
+
+
 char **get_input(char *input)
 {
   char **command = malloc(100 * sizeof(char *));
@@ -52,65 +38,6 @@ char **get_input(char *input)
     command[index] = NULL;
   }
   return command;
-}
-void redirect(char *str)
-{
-  char redir_commands[30][100];
-  char *token1 = strtok(str, " ");
-  int commandidx = 0;
-  while (token1 != NULL)
-  {
-    strcpy(redir_commands[commandidx++], token1);
-    printf("%s\n",token1);
-    token1 = strtok(NULL, " ");
-  }
-  int flag = 0;
-  char command[100];
-  command[0] = '\0';
-  for (int i = 0; i < commandidx; i++)
-  {
-    if (!strcmp(redir_commands[i], "<"))
-    {
-      int fd = open(redir_commands[i + 1], O_RDONLY);
-      if (fd < 0)
-      {
-        perror("Error opening file");
-      }
-      dup2(fd, 0);
-      close(fd);
-      flag = 1;
-      i++;
-    }
-    if (!strcmp(redir_commands[i], ">"))
-    {
-      int fd1 = open(redir_commands[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-      dup2(fd1, 1);
-      close(fd1);
-      flag = 1;
-      i++;
-    }
-    if (!strcmp(redir_commands[i], ">>"))
-    {
-      int fd2 = open(redir_commands[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-      dup2(fd2, 0);
-      close(fd2);
-      flag = 1;
-      i++;
-    }
-    if (!flag)
-    {
-      if (!strlen(command))
-      {
-        strcpy(command, redir_commands[i]);
-      }
-      else
-      {
-        strcat(command, redir_commands[i]);
-      }
-    }
-  }
-  char **dod = get_input(command);
-  execvp(dod[0], dod);
 }
 void getuserdetails(char username[], char pc_name[], char cwd[])
 {
