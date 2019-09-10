@@ -12,6 +12,7 @@
 #include <sys/time.h>
 #include <grp.h>
 #include <libgen.h>
+#include <signal.h>
 int i, j, k;
 char input[100000];
 char *homedir;

@@ -19,7 +19,7 @@ void fg(int j_id)
   {
     pid = temp->pid;
   }
-  printf("%d %s\n",pid,temp->proc_name);
-  kill(pid, SIGCONT);
+  int g=kill(pid, SIGCONT);
+  printf("%d %s %d\n",pid,temp->proc_name,g);
   waitpid(pid,&status,WUNTRACED);
 }

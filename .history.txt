@@ -1,21 +1,21 @@
-16
-fg 1
-firefox &
-ls
-jobs
-fg 1
-firefox &
-jobs
-firefox &
-jobs
-kjob 1 2
-jobs
-jobs
-firefox &
-emacs &
-jobs
-fg 1
-fg 1
-bg 1
-ls
-firefox &
+12
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+clear
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+ls > new
+cat new
+firefox & | echo "hi"
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l
+cat pwd.c | wc -l

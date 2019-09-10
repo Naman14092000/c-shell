@@ -12,7 +12,6 @@ void interpreter(char *str)
     if (pid == 0)
     {
       redirect(strin);
-      // REDIRECT(strin, red_cnt);
       exit(0);
     }
     else

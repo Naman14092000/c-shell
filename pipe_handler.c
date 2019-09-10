@@ -42,7 +42,6 @@ void pipe_handle(char str[][100], int pipe_count)
             {
                 interpreter(str[curr_cmd - 1]);
             }
-
             exit(0);
         }
         else
@@ -53,43 +52,7 @@ void pipe_handle(char str[][100], int pipe_count)
         }
     }
 }
-// void pipe_handler(char str[][100], int pipe_count)
-// {
-//     int fd[pipe_count * 2];
-//     pid_t pid;
-//     int status;
-//     for (int curr_cmd = 0; curr_cmd < pipe_count; curr_cmd++)
-//     {
-//         if (pid = forking() == 0)
-//         {
-//             pipe(fd + (2 * curr_cmd));
-//             // close(1);
-//             // dup(fd[curr_cmd]);
-//             dup2(fd[curr_cmd], 1);
-//             if (i > 0)
-//             {
-//                 // close(0);
-//                 // dup(fd[curr_cmd - 1]);
-//                 dup2(fd[curr_cmd - 1], 0);
-//             }
-//             int red_cnt = redirection_check(str[curr_cmd - 1]);
-//             if (red_cnt)
-//             {
-//                 redirect(str[curr_cmd]);
-//             }
-//             else
-//             {
-//                 interpreter(str[curr_cmd]);
-//             }
-//             close(fd[curr_cmd]);
-//             exit(0);
-//         }
-//         // else
-//         // {
-//         // waitpid(pid, &status, WUNTRACED);
-//         // }
-//     }
-// }
+
 int pipe_check(char *str)
 {
     int pip_cnt = 0;
