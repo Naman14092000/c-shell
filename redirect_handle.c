@@ -10,9 +10,9 @@ int redirection_check(char *str)
   {
     red_cnt += 2;
   }
-  if(strstr(str, ">>"))
+  if (strstr(str, ">>"))
   {
-    red_cnt+=2;
+    red_cnt += 2;
   }
   return red_cnt;
 }
@@ -68,13 +68,16 @@ void redirect(char *str)
       }
       else
       {
-        int idx=strlen(command);
-        command[idx]=' ';
-        command[idx+1]='\0';
+        int idx = strlen(command);
+        command[idx] = ' ';
+        command[idx + 1] = '\0';
         strcat(command, redir_commands[i]);
       }
     }
   }
   char **dod = get_input(command);
-  execvp(dod[0], dod);
+  if (execvp(dod[0], dod) < 0)
+  {
+    printf("Could not execute command\n");
+  }
 }

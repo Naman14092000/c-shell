@@ -12,8 +12,6 @@ pid_t forking()
   return pid;
 }
 
-
-
 char **get_input(char *input)
 {
   char **command = malloc(100 * sizeof(char *));
@@ -67,8 +65,19 @@ void getuserdetails(char username[], char pc_name[], char cwd[])
   printf("%s@%s:%s$ ", username, pc_name, CurrDir);
   fflush(stdout);
 }
+void SIGIhandler(int signalnum)
+{
+  signal(SIGINT, SIGIhandler);
+  fflush(stdout);
+}
+void SIGhandler(int signalnum)
+{
+  signal(SIGTSTP, SIGhandler);
+}
 int main()
 {
+  signal(SIGINT, SIGIhandler);
+  signal(SIGTSTP, SIGhandler);
   char *ctrld, *cwd, username[100], pc_name[100];
   cwd = (char *)malloc(sizeof(char) * 100);
   homedir = (char *)malloc(sizeof(char) * 100);
@@ -88,6 +97,10 @@ int main()
     int pid1, status;
     curworkdir(cwd);
     getuserdetails(username, pc_name, cwd);
+    int up = 0;
+    int cnt = 0;
+    int var = 0;
+    int flag=0;
     while (1)
     {
       char c = getchar();
@@ -97,10 +110,56 @@ int main()
         idx = 0;
         break;
       }
+      if (var >= 1 && var < 2)
+      {
+        var++;
+        continue;
+      }
+      else if(var==2)
+      {
+        var=0;
+        int cha=c;
+        if(cha==66)
+        {
+          cnt-=2;
+        }
+        else if(cha==65)
+        {
+
+        }
+        else
+        {
+          flag=1;
+        }
+        
+      }
       else
       {
-        input[idx++] = c;
+        if ((int)c == 27 && !up)
+        {
+          cnt++;
+          var = 1;
+        }
+        else
+        {
+          up = 1;
+          input[idx++] = c;
+        }
       }
+    }
+    if(flag)
+    {
+          printf("Invalid command\n");
+          continue;
+    }
+    if (up == 0)
+    {
+      getuserdetails(username, pc_name, cwd);
+      char pip_commands[20][100];
+      int commandindex = 0, pip_commandindex = 0;
+      char *runnext = UP(cnt);
+      printf("%s\n", runnext);
+      strcpy(input, runnext);
     }
     trim(input);
     char *separator = " ";
@@ -136,7 +195,8 @@ int main()
         }
         pipe_handle(pip_commands, pipe_cnt + 1);
       }
+      termination_check();
     }
-    termination_check();
   }
+  return 0;
 }

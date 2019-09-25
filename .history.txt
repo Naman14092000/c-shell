@@ -1,21 +1,21 @@
 12
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-clear
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-ls > new
-cat new
-firefox & | echo "hi"
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
-cat pwd.c | wc -l
+quit
+kjob 3 9
+firefox
+firefox
+jobs
+kjob 3 9
+kjob 1 9
+kjob 3 9
+kjob 3 9
+quit
+kjob 3 9
+quit
+quit
+fg 3
+kjob 3
+quit
+kjob 3
+kjob 3 9
+quit
+kjob 3 9

@@ -38,10 +38,14 @@ void writehist(char *sentence)
   remove(path);
   rename(path1, path);
 }
-void HISTORY(char *command)
+void HISTORY(char *command,int spcnt)
 {
+  if(spcnt>2)
+  {
+    printf("Invalid no of arguments\n");
+    return;
+  }
   int idx = 10;
-  // printf("%s\n",command);
   char *token = strtok(command, " ");
   if (token != NULL)
   {
@@ -51,19 +55,15 @@ void HISTORY(char *command)
       idx = atoi(token);
     }
   }
-  // printf("%d\n",idx);
   FILE *hisfile = fopen(path, "r");
   char temp[256];
   fgets(temp, 256, hisfile);
   int num = atoi(temp);
-  // printf("%d\n",num);
   char his[20][256];
-  // printf("%d\n",num-idx+21);
   for (int i = 0; i < 20; i++)
   {
-    if(fgets(his[i], 256, hisfile)==NULL)
-      his[i][0]='\0';
-
+    if (fgets(his[i], 256, hisfile) == NULL)
+      his[i][0] = '\0';
   }
   for (int i = (num - idx + 21) % 20; idx != 0; idx--)
   {
@@ -77,4 +77,27 @@ void HISTORY(char *command)
       i++;
   }
   fclose(hisfile);
+}
+char prev[30][100];
+char *UP(int cnt)
+{
+  sprintf(path,"%s/.history.txt",homedir);
+  int fd = open(path, O_RDONLY);
+  char buff[10000];
+  read(fd, buff, 3000);
+  int idx = 0;
+  char *token = strtok(buff, "\n");
+  while (token != NULL)
+  {
+    strcpy(prev[idx++], token); 
+    token=strtok(NULL,"\n");
+  }
+  if (idx > 21)
+  {
+    return prev[21 - cnt];
+  }
+  else
+  {
+    return prev[idx - cnt];
+  }
 }

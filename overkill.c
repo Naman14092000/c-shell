@@ -1,6 +1,11 @@
 #include "global.h"
-void OVERKILL()
+void OVERKILL(int spcnt)
 {
+  if(spcnt>1)
+  {
+    printf("Invalid no of arguments\n");
+    return;
+  }
   struct bg_process *temp = root;
   while (temp)
   {

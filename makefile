@@ -1,2 +1,2 @@
-Shell: Shell.c cd.c echo.c pwd.c ls.c background.c interrupt.c dirty.c pinfo.c trim.c history.c interpreter.c redirect_handle.c pipe_handler.c bg.c fg.c overkill.c kjobs.c unsetenv.c jobs.c setenv.c
-	gcc  -ggdb -o Shell Shell.c cd.c echo.c pwd.c  ls.c background.c interrupt.c dirty.c pinfo.c trim.c history.c interpreter.c redirect_handle.c pipe_handler.c bg.c fg.c overkill.c kjobs.c unsetenv.c jobs.c setenv.c -I.
+Shell: Shell.c cd.c echo.c pwd.c ls.c background.c interrupt.c dirty.c pinfo.c trim.c history.c interpreter.c redirect_handle.c pipe_handler.c bg.c fg.c overkill.c kjobs.c unsetenv.c jobs.c setenv.c chronjob.c
+	gcc  -ggdb -o Shell Shell.c cd.c echo.c pwd.c  ls.c background.c interrupt.c dirty.c pinfo.c trim.c history.c interpreter.c redirect_handle.c pipe_handler.c bg.c fg.c overkill.c kjobs.c unsetenv.c jobs.c setenv.c chronjob.c -I .

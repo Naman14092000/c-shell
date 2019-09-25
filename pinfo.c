@@ -1,10 +1,15 @@
 #include "global.h"
-void PINFO(char *str)
+void PINFO(char *str,int spcnt)
 {
+  if(spcnt>2)
+  {
+    printf("Invalid no of arguments\n");
+    return;
+  }
   trim(str);
   char process[100];
   char path[100];
-  int pd = getpid();
+  int pd = getppid();
   for (i = 5; i < strlen(str); i++)
   {
     process[i - 5] = str[i];

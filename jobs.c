@@ -1,6 +1,6 @@
 #include "global.h"
 int proc_cnt = 1;
-void JOBS()
+void JOBS(int spcnt)
 {
   struct bg_process *temp = root;
   while (temp)
@@ -18,11 +18,11 @@ void JOBS()
     token = strtok(NULL, "\n");
     token = strtok(NULL, "\n");
     char *token1 = strtok(token, " ");
-    if (token1[strlen(token1) - 1] == 'R')
+    if (token1[strlen(token1) - 1] == 'S')
     {
       printf("[%d] Running %s [%d]\n", proc_cnt, name, pid);
     }
-    if (token1[strlen(token1) - 1] == 'S')
+    if (token1[strlen(token1) - 1] == 'T')
     {
       printf("[%d] Stopped %s [%d]\n", proc_cnt, name, pid);
     }

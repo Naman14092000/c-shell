@@ -1,9 +1,9 @@
 #include "global.h"
-void bg(int j_id)
+void bg(int j_id, int spcnt)
 {
   int cnt = 1;
-  struct bg_process *temp=root;
-  while (cnt < j_id)
+  struct bg_process *temp = root;
+  while (cnt < j_id && temp)
   {
     if (temp->next)
     {
@@ -17,6 +17,11 @@ void bg(int j_id)
   if (cnt == j_id)
   {
     pid = temp->pid;
+    kill(pid, SIGCONT);
   }
-  kill(pid, SIGCONT);
+  else
+  {
+    printf("No such job number exist\n");
+    return;
+  }
 }

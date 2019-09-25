@@ -1,12 +1,26 @@
 #include "global.h"
+int fg_pid = 0;
+int ctrlz = 0;
+void zact(int sig)
+{
+  ctrlz = 1;
+  sigset_t mask;
+  sigemptyset(&mask);
+  sigaddset(&mask, SIGTSTP);
+  sigprocmask(SIG_UNBLOCK, &mask, NULL);
+  kill(fg_pid, SIGSTOP);
+  return;
+}
 void interpreter(char *str)
 {
-  char strin[100];
+  char strin[100],strout[100];
   int status;
   pid_t pid = forking();
   strcpy(strin, str);
+  strcpy(strout,str);
   char **dod = get_input(str);
   int red_cnt = redirection_check(strin);
+  int spcnt=spacecount(strout);
   if (red_cnt)
   {
     if (pid == 0)
@@ -28,7 +42,7 @@ void interpreter(char *str)
     }
     else if (pid == 0)
     {
-      int p = background(strin);
+      background(strin,spcnt);
     }
     else
     {
@@ -39,7 +53,7 @@ void interpreter(char *str)
   {
     if (pid == 0)
     {
-      CD(strin);
+      CD(strin,spcnt);
     }
     else
     {
@@ -51,7 +65,7 @@ void interpreter(char *str)
   {
     if (pid == 0)
     {
-      JOBS();
+      JOBS(spcnt);
       exit(0);
     }
     else
@@ -59,35 +73,35 @@ void interpreter(char *str)
       waitpid(pid, &status, 0);
     }
   }
-  else if(!strcmp(dod[0],"kjob"))
+  else if (!strcmp(dod[0], "kjob"))
   {
-    if(pid==0)
+    if (pid == 0)
     {
-      K_JOB(strin);
+      K_JOB(strin,spcnt);
       exit(0);
     }
     else
     {
-      waitpid(pid,&status,0);
+      waitpid(pid, &status, 0);
     }
   }
-  else if(!strcmp(dod[0],"overkill"))
+  else if (!strcmp(dod[0], "overkill"))
   {
-    if(pid==0)
+    if (pid == 0)
     {
-      OVERKILL();
+      OVERKILL(spcnt);
       exit(0);
     }
     else
     {
-      waitpid(pid,&status,0);
+      waitpid(pid, &status, 0);
     }
   }
   else if (!strcmp(dod[0], "ls"))
   {
     if (pid == 0)
     {
-      LS(strin);
+      LS(strin,spcnt);
       exit(0);
     }
     else
@@ -109,7 +123,7 @@ void interpreter(char *str)
         value[b - 1] = token4[b];
       }
       value[strlen(token4) - 2] = '\0';
-      SETENV(name, value);
+      SETENV(name, value, spcnt);
       printf("%s %s\n", name, value);
       exit(0);
     }
@@ -124,7 +138,7 @@ void interpreter(char *str)
     {
       char *token4 = strtok(strin, " ");
       token4 = strtok(NULL, " ");
-      UNSETENV(token4);
+      UNSETENV(token4,spcnt);
       printf("%s\n", token4);
       exit(0);
     }
@@ -133,37 +147,36 @@ void interpreter(char *str)
       waitpid(pid, &status, 0);
     }
   }
-  else if(!strcmp(dod[0],"bg"))
+  else if (!strcmp(dod[0], "bg"))
   {
-    if(pid==0)
+    if (pid == 0)
     {
-      bg(atoi(dod[1]));
+      bg(atoi(dod[1]),spcnt);
       exit(0);
     }
     else
     {
-      waitpid(pid,&status,0);
+      waitpid(pid, &status, 0);
     }
-    
   }
-  else if(!strcmp(dod[0],"fg"))
+  else if (!strcmp(dod[0], "fg"))
   {
-    if(pid==0)
+    if (pid == 0)
     {
-      fg(atoi(dod[1]));
+      int ppid = getppid();
+      fg(atoi(dod[1]), ppid,spcnt);
       exit(0);
     }
     else
     {
-      waitpid(pid,&status,0);
+      waitpid(pid, &status, 0);
     }
-    
   }
   else if (!strcmp(dod[0], "echo"))
   {
     if (pid == 0)
     {
-      ECHOAYA(strin);
+      ECHOAYA(strin,spcnt);
       exit(0);
     }
     else
@@ -175,7 +188,7 @@ void interpreter(char *str)
   {
     if (pid == 0)
     {
-      HISTORY(strin);
+      HISTORY(strin,spcnt);
       exit(0);
     }
     else
@@ -187,7 +200,7 @@ void interpreter(char *str)
   {
     if (pid == 0)
     {
-      PINFO(strin);
+      PINFO(strin,spcnt);
       exit(0);
     }
     else
@@ -230,6 +243,19 @@ void interpreter(char *str)
       waitpid(pid, &status, 0);
     }
   }
+  else if(!strcmp(dod[0],"chronjob"))
+  {
+    if(pid==0)
+    {
+      CHRONJOB(strin,spcnt);
+      exit(0);
+    }
+    else
+    {
+      waitpid(pid,&status,0);
+    }
+    
+  }
   else if (!strcmp(dod[0], "quit"))
   {
     exit(0);
@@ -240,13 +266,20 @@ void interpreter(char *str)
     {
       if (execvp(dod[0], dod) == -1)
       {
-        printf("Invalid command\n");
+        perror("Command Not Found");
       }
       exit(0);
     }
     else
     {
-      waitpid(pid, &status, 0);
+      fg_pid = pid;
+      signal(SIGTSTP, zact);
+      waitpid(pid, &status, WUNTRACED);
+      if (ctrlz == 1)
+      {
+        insert(pid, dod[0]);
+        ctrlz = 0;
+      }
     }
   }
 }

@@ -1,6 +1,11 @@
 #include "global.h"
-void LS(char *str)
+void LS(char *str,int spcnt)
 {
+  if(spcnt<1)
+  {
+    printf("Invalid no of arguments\n");
+    return;
+  }
   trim(str);
   char dir[200];
   char flags[50];

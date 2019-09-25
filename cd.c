@@ -1,6 +1,11 @@
 #include "global.h"
-void CD(char *str)
+void CD(char *str, int spcnt)
 {
+  if(spcnt>2)
+  {
+    printf("Invalid number of arguments\n");
+    return;
+  }
   char dir[200];
   j = 0;
   trim(str);
@@ -36,5 +41,8 @@ void CD(char *str)
   {
     strcpy(dir, homedir);
   }
-  chdir(dir);
+  if(chdir(dir)<0)
+  {
+    printf("No such file or directory\n");
+  }
 }

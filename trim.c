@@ -21,3 +21,16 @@ void trim(char *str)
   newstr[j] = '\0';
   strcpy(str, newstr);
 }
+int spacecount(char *str)
+{
+  char string2[1000];
+  int spcnt=0;
+  sprintf(string2,"%s",str);
+  char *token=strtok(string2," ");
+  while(token!=NULL)
+  {
+    spcnt++;
+    token=strtok(NULL," ");
+  }
+  return spcnt;
+}

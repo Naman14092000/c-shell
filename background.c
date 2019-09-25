@@ -1,7 +1,12 @@
 #include "global.h"
-int background(char *str)
+int background(char *str,int spcnt)
 {
     char **dod;
+    if(spcnt<=1)
+    {
+        printf("Invalid command\n");
+        return 0;
+    }
     dod = get_input(str);
     setpgid(0, 0);
     close(STDERR_FILENO);
