@@ -15,7 +15,7 @@ make
 
 ### main.c
 
-Sets home directory and Displays the shell prompt(<user_name@system_name:curr_dir_path>)  and checks if a back-ground process has been completed 
+Sets home directory and Displays the shell prompt(< user_name@system_name:curr_dir_path >)  and checks if a back-ground process has been completed 
  
 ### cd.c
 
@@ -29,7 +29,7 @@ Accepted flags: -l, -a, -la, -al, -l -a
 ### pinfo.c
 
 Implements pinfo command in the shell
-syntax : pinfo <num(pid)>
+syntax : pinfo < num(pid) >
 
 ### pwd.c
 
@@ -43,7 +43,7 @@ Implements echo
 
 Implements history
 maximum commands stored = 20, maximum commands displayed = 10
-syntax : history <num(between1to10)>
+syntax : history < num(between1to10) >
 
 ### interrupt.c
 
@@ -63,12 +63,12 @@ Removes all whitespaces at start in a string.
 
 ### redirect_handle.c
 Implement input and output redirection.
-syntax : <command> < inputfile > outputfile
+syntax : < command > < inputfile > outputfile
 there may be no inputfile or outputfile but atleast one should be present to go into REDIRECT function. 
 
 ### pipe_handler.c
 Implement pipe and pipe with redirection.
-syntax : <command1> | <command2> ....
+syntax : < command1 > | < command2 > ....
 atleast one pipe should be present for going into this.
 
 ### jobs.c
@@ -77,7 +77,7 @@ syntax : jobs
 
 ### kjobs.c
 Implement kjob that kills a job.
-syntax : kjob <jobid> <signalnumber>
+syntax : kjob < jobid > < signalnumber >
 
 ### overkill.c
 Implement overkill that kill all the jobs
@@ -85,23 +85,23 @@ syntax : overkill
 
 ### setenv.c
 Implement setenv that set a environment variable to a value.
-syntax : setenv ​<variable> [<value>]. ​
+syntax : setenv ​< variable > [< value >]. ​
 
 ### unsetenv.c
 Implement unsetenv that unset a environment variable.
-syntax : unsetenv <variable>
+syntax : unsetenv < variable >
 
 ### fg.c
 Implement fg that brings a background process to foreground.
-syntax : fg <jobid>
+syntax : fg < jobid >
 
 ### bg.c
 Implement bg that changes a stopped background process to a running background process.
-syntax : bg <jobid>
+syntax : bg < jobid >
 
 ### chronjob.c
 Implement chronjob that executes a particular command in fixed time interval for a certain period.
-syntax : chronjob -c <command> -t <timeinterval> -p <period>
+syntax : chronjob -c < command > -t < timeinterval > -p < period >
 
 ### ctrl - c
 My shell does not exit on pressing ctrl - c and on pressing ctrl - c, all foreground process that are running in my shell would be killed.
