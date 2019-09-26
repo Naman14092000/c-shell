@@ -43,32 +43,32 @@ Implements echo
 
 Implements history
 maximum commands stored = 20, maximum commands displayed = 10
-syntax : history <num(between 1 to 10)>
+syntax : history <num(between1to10)>
 
 ### interrupt.c
 
-Implement "nightswatch -n number interrupt"
+Implement "nightswatch -n < any number > interrupt"
 Press 'q' at any instant to exit.
 
 ### dirty.c
-Implement "nightswatch -n number dirty".
+Implement "nightswatch -n < any number > dirty".
 Press 'q' at any instant to exit.
 
 ### background.c
 Implement a background command.
-syntax : <command> &.
+syntax : < any command > &.
 
 ### trim.c
 Removes all whitespaces at start in a string.
 
 ### redirect_handle.c
 Implement input and output redirection.
-syntax : command < inputfile > outputfile
+syntax : <command> < inputfile > outputfile
 there may be no inputfile or outputfile but atleast one should be present to go into REDIRECT function. 
 
 ### pipe_handler.c
 Implement pipe and pipe with redirection.
-syntax : command1 | command2 ....
+syntax : <command1> | <command2> ....
 atleast one pipe should be present for going into this.
 
 ### jobs.c
@@ -77,7 +77,7 @@ syntax : jobs
 
 ### kjobs.c
 Implement kjob that kills a job.
-syntax : kjob jobid signalnumber
+syntax : kjob <jobid> <signalnumber>
 
 ### overkill.c
 Implement overkill that kill all the jobs
@@ -85,23 +85,23 @@ syntax : overkill
 
 ### setenv.c
 Implement setenv that set a environment variable to a value.
-syntax : setenv ​variable [value]. ​
+syntax : setenv ​<variable> [<value>]. ​
 
 ### unsetenv.c
 Implement unsetenv that unset a environment variable.
-syntax : unsetenv variable
+syntax : unsetenv <variable>
 
 ### fg.c
 Implement fg that brings a background process to foreground.
-syntax : fg jobid
+syntax : fg <jobid>
 
 ### bg.c
 Implement bg that changes a stopped background process to a running background process.
-syntax : bg jobid
+syntax : bg <jobid>
 
 ### chronjob.c
 Implement chronjob that executes a particular command in fixed time interval for a certain period.
-syntax : chronjob -c command -t time interval -p period
+syntax : chronjob -c <command> -t <timeinterval> -p <period>
 
 ### ctrl - c
 My shell does not exit on pressing ctrl - c and on pressing ctrl - c, all foreground process that are running in my shell would be killed.
