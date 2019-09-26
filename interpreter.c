@@ -1,28 +1,41 @@
 #include "global.h"
 int fg_pid = 0;
 int ctrlz = 0;
+
+//function to handle ctrl - z
 void zact(int sig)
 {
   ctrlz = 1;
-  sigset_t mask;
-  sigemptyset(&mask);
-  sigaddset(&mask, SIGTSTP);
-  sigprocmask(SIG_UNBLOCK, &mask, NULL);
+  // sigset_t mask;
+  // sigemptyset(&mask);
+  // sigaddset(&mask, SIGTSTP);
+  // sigprocmask(SIG_UNBLOCK, &mask, NULL);
   kill(fg_pid, SIGSTOP);
   return;
 }
+
+//function to check which command is pressed and send into respective function
 void interpreter(char *str)
 {
-  char strin[100],strout[100];
+  char strin[100], strout[100];
   int status;
+  if (str[0] == 'f' && str[1] == 'g')
+  {
+    int spcnt = spacecount(str);
+    char **dod = get_input(str);
+    int ppid = getppid();
+    fg(atoi(dod[1]), ppid, spcnt);
+    return;
+  }
   pid_t pid = forking();
   strcpy(strin, str);
-  strcpy(strout,str);
+  strcpy(strout, str);
   char **dod = get_input(str);
   int red_cnt = redirection_check(strin);
-  int spcnt=spacecount(strout);
+  int spcnt = spacecount(strout);
   if (red_cnt)
   {
+    // if input or output redirection is available
     if (pid == 0)
     {
       redirect(strin);
@@ -35,6 +48,7 @@ void interpreter(char *str)
   }
   else if (strstr(strin, "&"))
   {
+    // for a background process
     if (pid == -1)
     {
       perror("Error forking");
@@ -42,7 +56,7 @@ void interpreter(char *str)
     }
     else if (pid == 0)
     {
-      background(strin,spcnt);
+      background(strin, spcnt);
     }
     else
     {
@@ -53,7 +67,7 @@ void interpreter(char *str)
   {
     if (pid == 0)
     {
-      CD(strin,spcnt);
+      CD(strin, spcnt);
     }
     else
     {
@@ -77,7 +91,7 @@ void interpreter(char *str)
   {
     if (pid == 0)
     {
-      K_JOB(strin,spcnt);
+      K_JOB(strin, spcnt);
       exit(0);
     }
     else
@@ -101,7 +115,7 @@ void interpreter(char *str)
   {
     if (pid == 0)
     {
-      LS(strin,spcnt);
+      LS(strin, spcnt);
       exit(0);
     }
     else
@@ -138,7 +152,7 @@ void interpreter(char *str)
     {
       char *token4 = strtok(strin, " ");
       token4 = strtok(NULL, " ");
-      UNSETENV(token4,spcnt);
+      UNSETENV(token4, spcnt);
       printf("%s\n", token4);
       exit(0);
     }
@@ -151,20 +165,7 @@ void interpreter(char *str)
   {
     if (pid == 0)
     {
-      bg(atoi(dod[1]),spcnt);
-      exit(0);
-    }
-    else
-    {
-      waitpid(pid, &status, 0);
-    }
-  }
-  else if (!strcmp(dod[0], "fg"))
-  {
-    if (pid == 0)
-    {
-      int ppid = getppid();
-      fg(atoi(dod[1]), ppid,spcnt);
+      bg(atoi(dod[1]), spcnt);
       exit(0);
     }
     else
@@ -176,7 +177,7 @@ void interpreter(char *str)
   {
     if (pid == 0)
     {
-      ECHOAYA(strin,spcnt);
+      ECHOAYA(strin, spcnt);
       exit(0);
     }
     else
@@ -188,7 +189,7 @@ void interpreter(char *str)
   {
     if (pid == 0)
     {
-      HISTORY(strin,spcnt);
+      HISTORY(strin, spcnt);
       exit(0);
     }
     else
@@ -200,7 +201,7 @@ void interpreter(char *str)
   {
     if (pid == 0)
     {
-      PINFO(strin,spcnt);
+      PINFO(strin, spcnt);
       exit(0);
     }
     else
@@ -243,18 +244,17 @@ void interpreter(char *str)
       waitpid(pid, &status, 0);
     }
   }
-  else if(!strcmp(dod[0],"chronjob"))
+  else if (!strcmp(dod[0], "chronjob"))
   {
-    if(pid==0)
+    if (pid == 0)
     {
-      CHRONJOB(strin,spcnt);
+      CHRONJOB(strin, spcnt);
       exit(0);
     }
     else
     {
-      waitpid(pid,&status,0);
+      // waitpid(pid, &status, 0);
     }
-    
   }
   else if (!strcmp(dod[0], "quit"))
   {
@@ -278,6 +278,7 @@ void interpreter(char *str)
       if (ctrlz == 1)
       {
         insert(pid, dod[0]);
+        setpgid(pid,pid);        
         ctrlz = 0;
       }
     }

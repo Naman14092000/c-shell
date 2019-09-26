@@ -1,5 +1,7 @@
 #include "global.h"
-void CHRONJOB(char *str,int spcnt)
+
+// function to execute a perticuler command after a regular time interval
+void CHRONJOB(char *str, int spcnt)
 {
     char redir_commands[20][100];
     int commandidx = 0;
@@ -53,10 +55,26 @@ void CHRONJOB(char *str,int spcnt)
     for (int i = 0; i < j; i++)
     {
         sleep(time);
-        strcpy(command1,command);
-        printf("%s %d\n", command1,j);
-        interpreter(command1);
+        strcpy(command1, command);
+        printf("%s %d\n", command1, j);
+        int pid = forking();
+        if (pid < 0)
+        {
+            perror("fork failed");
+        }
+        else if (pid == 0)
+        {
+
+            char **dod = get_input(command);
+            execvp(dod[0], dod);
+            // interpreter(command1);
+            exit(0);
+        }
+        else
+        {
+            insert(pid, "chronjob");
+        }
     }
-    j=period%time;
+    j = period % time;
     sleep(j);
 }

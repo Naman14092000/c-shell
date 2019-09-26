@@ -1,4 +1,6 @@
 #include "global.h"
+
+// function that implements ls
 void LS(char *str,int spcnt)
 {
   if(spcnt<1)
@@ -78,14 +80,17 @@ void LS(char *str,int spcnt)
   {
     if ((flags[0] == 'l' && flags[1] == 'a') || (flags[0] == 'a' && flags[1] == 'l'))
     {
+      // ls -la or ls -al
       LS1(dir);
     }
     else if (flags[0] == 'l')
     {
+      // ls -l
       LS2(dir);
     }
     else if (flags[0] == 'a')
     {
+      //ls -a
       LS3(dir);
     }
     else
@@ -95,6 +100,7 @@ void LS(char *str,int spcnt)
   }
   else
   {
+    // ls
     struct dirent *dirname;
     if (strlen(dir) == 0)
     {
@@ -119,6 +125,8 @@ void LS(char *str,int spcnt)
   }
   exit(0);
 }
+
+// function to implement ls -la or ls -al
 void LS1(char *dir)
 {
   DIR *p;
@@ -151,6 +159,8 @@ void LS1(char *dir)
   }
   exit(0);
 }
+
+// function to implement ls -l
 void LS2(char *dir)
 {
   DIR *p;
@@ -189,6 +199,8 @@ void LS2(char *dir)
   }
   exit(0);
 }
+
+// function to implement ls -a
 void LS3(char *dir)
 {
   DIR *p;

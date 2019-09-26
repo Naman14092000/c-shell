@@ -11,7 +11,7 @@ pid_t forking()
   pid = fork();
   return pid;
 }
-
+// function to parse command into null terminated array of string
 char **get_input(char *input)
 {
   char **command = malloc(100 * sizeof(char *));
@@ -27,6 +27,7 @@ char **get_input(char *input)
 
     parsed = strtok(NULL, separator);
   }
+  // if & is coming then remove it
   if (!strcmp(command[index - 1], "&"))
   {
     command[index - 1] = NULL;
@@ -37,6 +38,7 @@ char **get_input(char *input)
   }
   return command;
 }
+// function to get commandprompt
 void getuserdetails(char username[], char pc_name[], char cwd[])
 {
   struct passwd *details;
@@ -65,11 +67,13 @@ void getuserdetails(char username[], char pc_name[], char cwd[])
   printf("%s@%s:%s$ ", username, pc_name, CurrDir);
   fflush(stdout);
 }
+// function to handle ctrl - c
 void SIGIhandler(int signalnum)
 {
   signal(SIGINT, SIGIhandler);
   fflush(stdout);
 }
+// function to handle ctrl - z
 void SIGhandler(int signalnum)
 {
   signal(SIGTSTP, SIGhandler);
@@ -103,6 +107,7 @@ int main()
     int flag=0;
     while (1)
     {
+      // get input using getchar
       char c = getchar();
       if (c == '\n' || c == EOF)
       {
@@ -135,6 +140,7 @@ int main()
       }
       else
       {
+        // checking if up key is pressed
         if ((int)c == 27 && !up)
         {
           cnt++;
@@ -163,7 +169,6 @@ int main()
     }
     trim(input);
     char *separator = " ";
-
     char **dod;
     char token[100];
     int idx = 0;
@@ -174,19 +179,24 @@ int main()
     int commandindex = 0, pip_commandindex = 0;
     while (token2 != NULL)
     {
+      // converting the ; seperated commands into individual command
       strcpy(commands[commandindex++], token2);
       token2 = strtok(NULL, ";");
     }
     for (int q = 0; q < commandindex; q++)
     {
+      //checking if pipe is present
       int pipe_cnt = pipe_check(commands[q]);
+      // writing the command into history file
       writehist(commands[q]);
       if (!pipe_cnt)
       {
+        // if pipe is not present
         interpreter(commands[q]);
       }
       else if (pipe_cnt > 0)
       {
+        // if pipe is present
         char *token1 = strtok(commands[q], "|");
         while (token1 != NULL)
         {

@@ -1,4 +1,5 @@
 #include "global.h"
+// function to remove all the preceding whitespaces in a string
 void trim(char *str)
 {
   char newstr[100];
@@ -21,6 +22,8 @@ void trim(char *str)
   newstr[j] = '\0';
   strcpy(str, newstr);
 }
+
+// function to find number of spaces in a string
 int spacecount(char *str)
 {
   char string2[1000];

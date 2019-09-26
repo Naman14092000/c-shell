@@ -1,4 +1,6 @@
 #include "global.h"
+
+// function that implement echo
 void ECHOAYA(char *str,int spcnt)
 {
   trim(str);

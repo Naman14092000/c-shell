@@ -1,8 +1,10 @@
 #include "global.h"
-int background(char *str,int spcnt)
+
+// function to send a command into background
+int background(char *str, int spcnt)
 {
     char **dod;
-    if(spcnt<=1)
+    if (spcnt <= 1)
     {
         printf("Invalid command\n");
         return 0;
@@ -15,6 +17,8 @@ int background(char *str,int spcnt)
         perror("Could not execute command");
     }
 }
+
+// function to delete node corresponding to terminated background process
 void delete_bg(struct bg_process *node)
 {
     if (node == root)
@@ -29,6 +33,8 @@ void delete_bg(struct bg_process *node)
         strcpy(node->proc_name, node->next->proc_name);
     }
 }
+
+// function to insert a node corresponding to a new background process
 void insert(pid_t pid, char *str)
 {
     struct bg_process *temp = root;
@@ -56,6 +62,8 @@ void insert(pid_t pid, char *str)
         temp->next->next = NULL;
     }
 }
+
+// function to check if some background process exited
 void termination_check()
 {
     struct bg_process *temp1 = root;
@@ -66,16 +74,25 @@ void termination_check()
 
         if (ret == -1)
         {
-            printf("Process %s with id %d", temp1->proc_name, temp1->pid);
-            fflush(stdout);
-            psignal(WTERMSIG(status), "exited by ");
             delete_bg(temp1);
         }
         else if (ret > 0)
         {
-            printf("Process %s with pid  %d exited normally\n", temp1->proc_name, temp1->pid);
-            fflush(stdout);
-            delete_bg(temp1);
+            if (WIFEXITED(status))
+            {
+                // if exited normally
+                printf("Process %s with pid  %d exited normally\n", temp1->proc_name, temp1->pid);
+                fflush(stdout);
+                delete_bg(temp1);
+            }
+            else if (WIFSIGNALED(status))
+            {
+                // if exited abnormally
+                printf("Process %s with id %d ", temp1->proc_name, temp1->pid);
+                fflush(stdout);
+                printf("exited by signal %d\n",WTERMSIG(status));
+                delete_bg(temp1);
+            }
         }
         if (temp1->next != NULL)
             temp1 = temp1->next;

@@ -1,4 +1,5 @@
 #include "global.h"
+// function to kill a process by its job number
 void K_JOB(char *str, int spcnt)
 {
   if (spcnt != 3)
@@ -28,8 +29,6 @@ void K_JOB(char *str, int spcnt)
   {
     pid = temp->pid;
     int sig = atoi(token);
-    printf("Process %s with id %d exited by signal %d\n", temp->proc_name, temp->pid, sig);
-    delete_bg(temp);
     kill(pid, sig);
   }
   else

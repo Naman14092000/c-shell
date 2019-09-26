@@ -1,5 +1,7 @@
 #include "global.h"
 char path[256];
+
+// function to write history
 void writehist(char *sentence)
 {
   char input[256];
@@ -38,6 +40,8 @@ void writehist(char *sentence)
   remove(path);
   rename(path1, path);
 }
+
+// function to print history
 void HISTORY(char *command,int spcnt)
 {
   if(spcnt>2)
@@ -79,6 +83,8 @@ void HISTORY(char *command,int spcnt)
   fclose(hisfile);
 }
 char prev[30][100];
+
+// function that implement press of up arrow key
 char *UP(int cnt)
 {
   sprintf(path,"%s/.history.txt",homedir);

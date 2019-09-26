@@ -1,5 +1,6 @@
 #include "global.h"
 int proc_cnt = 1;
+// function to print all jobs running in background
 void JOBS(int spcnt)
 {
   struct bg_process *temp = root;

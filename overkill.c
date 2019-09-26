@@ -1,4 +1,6 @@
 #include "global.h"
+
+// function that implements overkill
 void OVERKILL(int spcnt)
 {
   if(spcnt>1)

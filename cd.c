@@ -1,4 +1,6 @@
 #include "global.h"
+
+//function that implements cd
 void CD(char *str, int spcnt)
 {
   if(spcnt>2)
@@ -43,6 +45,7 @@ void CD(char *str, int spcnt)
   }
   if(chdir(dir)<0)
   {
+    // if directory not found
     printf("No such file or directory\n");
   }
 }

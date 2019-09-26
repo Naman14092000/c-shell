@@ -1,4 +1,6 @@
 #include "global.h"
+
+// function that implement pinfo
 void PINFO(char *str,int spcnt)
 {
   if(spcnt>2)

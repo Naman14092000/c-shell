@@ -1,4 +1,6 @@
 #include "global.h"
+
+// function that implement bg
 void bg(int j_id, int spcnt)
 {
   int cnt = 1;

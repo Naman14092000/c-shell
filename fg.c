@@ -2,17 +2,21 @@
 int signalFlag22 = 0;
 int anotherSignalFlag22 = 0;
 
+// function to handle ctrl - z
 void anotherSignalHandler22(int sig)
 {
   anotherSignalFlag22 = 1;
   return;
 }
 
+// function to handle ctrl - c
 void signalHandler22(int sig)
 {
   signalFlag22 = 1;
   return;
 }
+
+// function to send a background process to foreground
 void fg(int j_id,int ppid,int spcnt)
 {
   int cnt = 1;
@@ -38,11 +42,9 @@ void fg(int j_id,int ppid,int spcnt)
     int g = kill(pid, SIGCONT);
     char commane[1000];
     sprintf(commane, "%s", temp->proc_name);
-    printf("%d %s %d %d\n", pid, commane, g, ppid);
-    int ret = waitpid(ppid, &status, WNOHANG);
+    int ret = waitpid(pid, &status, WNOHANG);
     while (ret != pid)
     {
-      // printf("%d\n", ret);
       if (signalFlag22 == 1)
       {
         kill(pid, SIGINT);
@@ -52,12 +54,13 @@ void fg(int j_id,int ppid,int spcnt)
       if (anotherSignalFlag22 == 1)
       {
         kill(pid, SIGSTOP);
+        // setpgid(0,0);
+        setpgid(pid,pid);
         insert(pid, commane);
         anotherSignalFlag22 = 0;
         break;
       }
-      ret = waitpid(ppid, &status, WNOHANG);
-      // printf("%d\n", __getpgid(pid));
+      ret = waitpid(pid, &status, WNOHANG);
     }
   }
   else

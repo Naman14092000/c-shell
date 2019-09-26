@@ -13,7 +13,7 @@ void changemode(int dir)
   else
     tcsetattr( STDIN_FILENO, TCSANOW, &oldt);
 }
- 
+// function that detects a keyboard interrupt 
 int kbhit (void)
 {
   struct timeval tv;
@@ -29,6 +29,7 @@ int kbhit (void)
   return FD_ISSET(STDIN_FILENO, &rdfs);
  
 }
+// function that implement interrupt
 void INTERRUPT(int n)
 {
   while (1)

@@ -1,4 +1,6 @@
 #include "global.h"
+
+// function that checks whether input or output redirection is present
 int redirection_check(char *str)
 {
   int red_cnt = 0;
@@ -17,6 +19,7 @@ int redirection_check(char *str)
   return red_cnt;
 }
 
+// function that implements redirection
 void redirect(char *str)
 {
   char redir_commands[30][100];
