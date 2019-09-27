@@ -138,7 +138,6 @@ void interpreter(char *str)
       }
       value[strlen(token4) - 2] = '\0';
       SETENV(name, value, spcnt);
-      printf("%s %s\n", name, value);
       exit(0);
     }
     else
@@ -153,7 +152,6 @@ void interpreter(char *str)
       char *token4 = strtok(strin, " ");
       token4 = strtok(NULL, " ");
       UNSETENV(token4, spcnt);
-      printf("%s\n", token4);
       exit(0);
     }
     else
@@ -258,12 +256,15 @@ void interpreter(char *str)
   }
   else if (!strcmp(dod[0], "quit"))
   {
+    OVERKILL(1);
     exit(0);
   }
   else
   {
     if (pid == 0)
     {
+      // signal(SIGTSTP, zact);
+      setpgid(0,0);
       if (execvp(dod[0], dod) == -1)
       {
         perror("Command Not Found");
@@ -273,14 +274,15 @@ void interpreter(char *str)
     else
     {
       fg_pid = pid;
-      signal(SIGTSTP, zact);
+      setpgid(pid, pid);
+      int setgp = tcsetpgrp(STDIN_FILENO, pid);
       waitpid(pid, &status, WUNTRACED);
-      if (ctrlz == 1)
+      if(WIFSTOPPED(status))
       {
         insert(pid, dod[0]);
-        setpgid(pid,pid);        
         ctrlz = 0;
       }
+      tcsetpgrp(0, getpid());
     }
   }
 }

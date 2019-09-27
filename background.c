@@ -72,11 +72,7 @@ void termination_check()
     {
         int ret = waitpid(temp1->pid, &status, WNOHANG);
 
-        if (ret == -1)
-        {
-            delete_bg(temp1);
-        }
-        else if (ret > 0)
+        if (ret > 0)
         {
             if (WIFEXITED(status))
             {

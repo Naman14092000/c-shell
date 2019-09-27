@@ -56,7 +56,6 @@ void CHRONJOB(char *str, int spcnt)
     {
         sleep(time);
         strcpy(command1, command);
-        printf("%s %d\n", command1, j);
         int pid = forking();
         if (pid < 0)
         {

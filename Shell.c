@@ -78,10 +78,19 @@ void SIGhandler(int signalnum)
 {
   signal(SIGTSTP, SIGhandler);
 }
+
+// function to handle signal ttou
+void SIGTThandler(int signalnum)
+{
+  tcsetpgrp(STDIN_FILENO,getpid());
+}
+
+// main
 int main()
 {
   signal(SIGINT, SIGIhandler);
   signal(SIGTSTP, SIGhandler);
+  signal(SIGTTOU,SIGTThandler);
   char *ctrld, *cwd, username[100], pc_name[100];
   cwd = (char *)malloc(sizeof(char) * 100);
   homedir = (char *)malloc(sizeof(char) * 100);
@@ -160,6 +169,7 @@ int main()
     }
     if (up == 0)
     {
+      // if up key is pressed
       getuserdetails(username, pc_name, cwd);
       char pip_commands[20][100];
       int commandindex = 0, pip_commandindex = 0;

@@ -33,35 +33,28 @@ void fg(int j_id,int ppid,int spcnt)
     cnt++;
   }
   int pid;
-  if (cnt == j_id)
+  if (cnt == j_id && temp)
   {
     pid = temp->pid;
     delete_bg(temp);
     signal(SIGINT, signalHandler22);
     signal(SIGTSTP, anotherSignalHandler22);
+    setpgid(pid,pid);
+    tcsetpgrp(STDIN_FILENO,pid);
     int g = kill(pid, SIGCONT);
     char commane[1000];
     sprintf(commane, "%s", temp->proc_name);
-    int ret = waitpid(pid, &status, WNOHANG);
-    while (ret != pid)
+    int ret = waitpid(pid, &status, WUNTRACED);
+    if(WIFSTOPPED(status))
     {
-      if (signalFlag22 == 1)
-      {
-        kill(pid, SIGINT);
-        signalFlag22 = 0;
-        break;
-      }
-      if (anotherSignalFlag22 == 1)
-      {
-        kill(pid, SIGSTOP);
-        // setpgid(0,0);
-        setpgid(pid,pid);
-        insert(pid, commane);
-        anotherSignalFlag22 = 0;
-        break;
-      }
-      ret = waitpid(pid, &status, WNOHANG);
+      kill(pid,SIGSTOP);
+      insert(pid, commane);
     }
+    if(WIFEXITED(status))
+    {
+      kill(pid,SIGINT);
+    }
+    tcsetpgrp(0,getpid());
   }
   else
   {

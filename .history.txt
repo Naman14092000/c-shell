@@ -1,21 +1,21 @@
-18
-chronjob -c ls -t 3 -p 6
-ls
-quit
-chronjob -c emacs -t 3 -p 6
-chronjob -c ls -t 3 -p 6
-quit
-chronjob -c ls -t 3 -p 6
-ls
-cd //
-chronjob -c emacs -t 3 -p 6
-ls
-cd //
-ls
-cd
-ls
-cd ..
-cd
-quit
+2
 jobs
 quit
+firefox
+emacs
+gedit
+gedit
+gedit
+jobs
+bg 1
+bg 2
+bg 3
+jobs
+fg 2
+jobs
+quit
+firefox &
+quit
+firefox &
+jobs
+fg 1

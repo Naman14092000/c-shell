@@ -16,7 +16,7 @@ void bg(int j_id, int spcnt)
     cnt++;
   }
   int pid;
-  if (cnt == j_id)
+  if (cnt == j_id && temp)
   {
     pid = temp->pid;
     kill(pid, SIGCONT);
